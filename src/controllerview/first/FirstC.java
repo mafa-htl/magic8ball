@@ -38,7 +38,7 @@ public class FirstC implements Initializable {
       FirstC ctrl = fxmlLoader.getController();
       ctrl.stage = stage;
       
-      stage.setTitle("Welcome");
+      stage.setTitle("Login");
       stage.setScene(new Scene(root, 400, 400));
       stage.show();
     }
@@ -92,7 +92,7 @@ public class FirstC implements Initializable {
         System.out.println("Login was unsuccessful");
     }
     catch (Exception e){
-      System.err.println("Something wrong: " + e.getMessage());
+      System.err.println("Something is wrong: " + e.getMessage());
       e.printStackTrace(System.err);
     }
   }
