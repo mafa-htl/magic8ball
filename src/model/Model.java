@@ -74,7 +74,7 @@ public class Model {
             //check for trigger words in question
             for (int i = 0; i < trigger_words.size(); i++) {
 
-                if (question.contains(trigger_words.get(i).toString().toLowerCase()))
+                if (question.toLowerCase().contains(trigger_words.get(i).toString().toLowerCase()))
                     bonus += 5;
             }
 
