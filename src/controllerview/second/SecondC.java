@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Model;
 
 import java.io.File;
 import java.net.URL;
@@ -61,17 +62,13 @@ public class SecondC implements Initializable {
 
       if(question.contains("?")) {
 
-        //read all lines in the following files, delete empty lines and save them in lists
-        ArrayList standard_answers = readFile("./eight_ball_files/standard_answers.txt");
-        standard_answers.removeAll(Arrays.asList("", null));
-        ArrayList special_answers = readFile("./eight_ball_files/special_answers.txt");
-        special_answers.removeAll(Arrays.asList("", null));
-        ArrayList special_questions = readFile("./eight_ball_files/special_questions.txt");
-        special_questions.removeAll(Arrays.asList("", null));
-        ArrayList trigger_words = readFile("./eight_ball_files/trigger_words.txt");
-        trigger_words.removeAll(Arrays.asList("", null));
+        Model model = new Model();
 
-        int bonus = 0;
+        //read all lines in the following files, delete empty lines and save them in lists
+        ArrayList special_answers = model.readFile("./eight_ball_files/special_answers.txt");
+        special_answers.removeAll(Arrays.asList("", null));
+        ArrayList special_questions = model.readFile("./eight_ball_files/special_questions.txt");
+        special_questions.removeAll(Arrays.asList("", null));
 
         if (special_questions.contains(question)) {
           //set Text of ball_label to answer of corresponding special question
@@ -80,22 +77,10 @@ public class SecondC implements Initializable {
 
         else{
           //check for trigger words in question
-          for (int i = 0; i < trigger_words.size(); i++) {
-
-            if (question.contains(trigger_words.get(i).toString().toLowerCase()))
-              bonus += 5;
-          }
-
-          Random r = new Random();
-          int rNum = r.nextInt(standard_answers.size());
-
-          //adding bonus of trigger words to random number to get index (the higher 'index' the more positive of an answer)
-          int index = rNum + bonus;
-          if(index >= standard_answers.size())
-            index = standard_answers.size() - 1;
+          String answer = model.getRandomAnswer(question);
 
           //set ball_label text to an answer in standard_answers
-          ball_label.setText(standard_answers.get(index).toString());
+          ball_label.setText(answer);
         }
       }
 
@@ -109,22 +94,6 @@ public class SecondC implements Initializable {
       System.err.println("Something is wrong: " + e.getMessage());
       e.printStackTrace(System.err);
     }
-  }
-
-  private ArrayList readFile(String pathname){
-    try {
-      Scanner sc = new Scanner(new File(pathname));
-      ArrayList<String> file_data = new ArrayList<String>();
-      while (sc.hasNextLine()) {
-        file_data.add(sc.nextLine());
-      }
-      return file_data;
-    }
-    catch (Exception e){
-      System.err.println("Something is wrong with path: " + e.getMessage());
-      e.printStackTrace(System.err);
-    }
-    return null;
   }
 
 }

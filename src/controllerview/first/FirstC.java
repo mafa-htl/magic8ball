@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Model;
 
 import java.awt.*;
 import java.io.File;
@@ -55,45 +56,22 @@ public class FirstC implements Initializable {
   @FXML
   private void login() {
 
-    try {
-      //read all lines in login_data file and save them in a list
-      Scanner sc = new Scanner(new File("./login_files/login_data.txt"));
-      ArrayList<String> login_data = new ArrayList<String>();
-      while (sc.hasNextLine()) {
-        login_data.add(sc.nextLine());
-      }
+    Model model = new Model();
 
-      //remove all empty elements in List
-      login_data.removeAll(Arrays.asList("", null));
+    String usrName = username_field.getText();
+    String pwd = password_field.getText();
 
-      String usrName = username_field.getText();
-      String pwd = password_field.getText();
-      boolean loginProvided = false;
+    boolean loginProvided = model.isCorrectLogin(usrName, pwd);
 
-      //check provided login data with login list
-      for (int i = 0; i < login_data.size() - 1; i++){
+    //checks if provided login data is acceptible
+    if(loginProvided == true) {
+      //navigate from welcome screen to main screen
+      System.out.println("Login successful ...");
 
-        //Username in TextField on an even number in login list and Password in TextField the same as next index in List
-        if(usrName.equals(login_data.get(i)) && i % 2 == 0 && pwd.equals(login_data.get(i + 1))) {
-          loginProvided = true;
-          break;
-        }
-      }
-
-      //checks if provided login data is acceptible
-      if(loginProvided == true) {
-        //navigate from welcome screen to main screen
-        System.out.println("Login successful ...");
-
-        SecondC.show(new Stage(), "Hello from Welcome Controller!");
-        stage.close();
-      }
-      else
-        System.out.println("Login was unsuccessful");
+      SecondC.show(new Stage(), "Hello from Welcome Controller!");
+      stage.close();
     }
-    catch (Exception e){
-      System.err.println("Something is wrong: " + e.getMessage());
-      e.printStackTrace(System.err);
-    }
+    else
+      System.out.println("Login was unsuccessful");
   }
 }
